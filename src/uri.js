@@ -209,7 +209,7 @@ var Uri = function (uriString) {
         // Relative path: ../tomorrow
         // Result:        /foo/bar/tomorrow
 
-        toPath = function(val) {
+        toPath = function (val) {
             if (val===undefined) {
                 return uriParts.path;
             }
@@ -346,6 +346,8 @@ var Uri = function (uriString) {
         deleteQueryParam: deleteQueryParam,
         addQueryParam: addQueryParam,
         replaceQueryParam: replaceQueryParam,
+
+        toPath: toPath,
 
         toString: toString,
         clone: clone
