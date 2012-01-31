@@ -1,4 +1,3 @@
-
 var Uri = function (uriString) {
 
     // uri string parsing, attribute manipulation and stringification
@@ -201,6 +200,56 @@ var Uri = function (uriString) {
         },
 
         /*
+            Converters
+        */
+
+        // toPath() converts a relative path into its absolute path, e.g.
+        //
+        // Current path:  /foo/bar/today
+        // Relative path: ../tomorrow
+        // Result:        /foo/bar/tomorrow
+
+        toPath = function(val) {
+            if (val===undefined) {
+                return uriParts.path;
+            }
+
+            // If relative path starts with '/'
+            if (val.substring(0,1)=='/') {
+                return uriParts.path = val;
+            }
+
+            var base_path = uriParts.path.split('/'),
+                rel_path = val.split('/');
+
+            if (base_path.slice(-1)[0]==='') {
+                base_path.pop();
+            }
+
+            var part;
+            while (part = rel_path.shift()) {
+                switch (part) {
+                    case '..':
+                        if (base_path.length > 1) {
+                            base_path.pop();
+                        }
+                        break;
+
+                    case '.':
+                        // skip
+                        break;
+
+                    default:
+                        base_path.push(part);
+                }
+            }
+
+            uriParts.path = base_path.join('/');
+
+            return this;
+        },
+
+        /*
             Serialization
         */
 
@@ -282,7 +331,7 @@ var Uri = function (uriString) {
         path: path,
         query: query,
         anchor: anchor,
-        
+
         setProtocol: setProtocol,
         setHasAuthorityPrefix: setHasAuthorityPrefix,
         setUserInfo: setUserInfo,
@@ -291,13 +340,13 @@ var Uri = function (uriString) {
         setPath: setPath,
         setQuery: setQuery,
         setAnchor: setAnchor,
-        
+
         getQueryParamValue: getQueryParamValue,
         getQueryParamValues: getQueryParamValues,
         deleteQueryParam: deleteQueryParam,
         addQueryParam: addQueryParam,
         replaceQueryParam: replaceQueryParam,
-        
+
         toString: toString,
         clone: clone
     };
