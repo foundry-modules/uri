@@ -18,11 +18,11 @@ MODULES = ${SRC_DIR}/intro.js ${BASE_FILES} ${SRC_DIR}/outro.js
 VERSION = $(shell cat version.txt | sed ':a;N;$!ba;s/\n/ /g')
 REPLACE_VER = sed "s/@VERSION/${VERSION}/"
 
-JSURI = ${DIST_DIR}/jsuri.js
-JSURI_MIN = ${DIST_DIR}/jsuri.min.js
+JSURI = ${DIST_DIR}/jquery.uri.js
+JSURI_MIN = ${DIST_DIR}/jquery.uri.min.js
 
-JSURI_V = ${DIST_DIR}/jsuri-${VERSION}.js
-JSURI_MINV = ${DIST_DIR}/jsuri-${VERSION}.min.js
+JSURI_V = ${DIST_DIR}/jquery.uri-${VERSION}.js
+JSURI_MINV = ${DIST_DIR}/jquery.uri-${VERSION}.min.js
 
 DATE=$(shell git log -1 --pretty=format:%ad)
 
@@ -38,7 +38,7 @@ core: dist_dir jsuri min lint v minv readme_wiki
 dist_dir:
 	@@mkdir -p ${DIST_DIR}
 
-jsuri: 
+jsuri:
 	@@echo 'Building' ${JSURI}
 	@@cat ${MODULES} | \
 		sed 's/@DATE/'"${DATE}"'/' | \
@@ -52,7 +52,7 @@ lint: jsuri
 		@@echo "You must have JSHint installed in order to lint jsUri."; \
 	fi
 
-min: jsuri 
+min: jsuri
 	@@if test ! -z ${UGLIFY}; then \
 		echo "Minifying " ${JSURI_MIN}; \
 		${UGLIFY} ${JSURI} > ${JSURI_MIN}.tmp; \
@@ -62,11 +62,11 @@ min: jsuri
 		@@echo "You must have uglifyjs installed in order to minify jsUri."; \
 	fi
 
-v: jsuri dist_dir 
+v: jsuri dist_dir
 	@@echo "Copying ${JSURI} to ${JSURI_V}";
 	@@cp ${JSURI} ${JSURI_V}
 
-minv: min dist_dir 
+minv: min dist_dir
 	@@echo "Copying ${JSURI_MIN} to ${JSURI_MINV}";
 	@@cp ${JSURI_MIN} ${JSURI_MINV}
 
