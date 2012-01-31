@@ -24,3 +24,4 @@
  * Date: @DATE
  */
 
+(function ($) {
