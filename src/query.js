@@ -151,7 +151,7 @@ var Query = function (queryString) {
         deleteParam: deleteParam,
         addParam: addParam,
         replaceParam: replaceParam,
-        
+
         toString: toString
     };
 };

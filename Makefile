@@ -11,7 +11,7 @@ LINT = `which jshint 2>/dev/null`
 UGLIFY ?= `which uglifyjs 2>/dev/null`
 POST_UGLIFY = ${JS_ENGINE} ${BUILD_DIR}/post-uglify.js
 
-BASE_FILES = ${SRC_DIR}/query.js ${SRC_DIR}/uri.js
+BASE_FILES = ${SRC_DIR}/helper.js ${SRC_DIR}/query.js ${SRC_DIR}/uri.js
 
 MODULES = ${SRC_DIR}/intro.js ${BASE_FILES} ${SRC_DIR}/outro.js
 
