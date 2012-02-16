@@ -13,7 +13,7 @@ POST_UGLIFY = ${JS_ENGINE} ${BUILD_DIR}/post-uglify.js
 
 BASE_FILES = ${SRC_DIR}/helper.js ${SRC_DIR}/query.js ${SRC_DIR}/uri.js
 
-MODULES = ${SRC_DIR}/intro.js ${BASE_FILES} ${SRC_DIR}/outro.js
+MODULES = ${BASE_FILES}
 
 VERSION = $(shell cat version.txt | sed ':a;N;$!ba;s/\n/ /g')
 REPLACE_VER = sed "s/@VERSION/${VERSION}/"
@@ -29,8 +29,12 @@ DATE=$(shell git log -1 --pretty=format:%ad)
 PANDOC ?= `which pandoc 2>/dev/null`
 README_WIKI = ${DIST_DIR}/README.wiki
 
+FOUNDRY_DIR = ../..
+PRODUCTION_DIR = ${FOUNDRY_DIR}/scripts
+DEVELOPMENT_DIR = ${FOUNDRY_DIR}/scripts_
+FOUNDRY_UGLIFY = uglifyjs --unsafe -nc
 
-all: core
+all: dist_dir jsuri foundry
 
 core: dist_dir jsuri min lint v minv readme_wiki
 	@@echo "jsUri build complete."
@@ -84,3 +88,10 @@ readme_wiki:
 clean:
 	@@echo "Removing Distribution directory:" ${DIST_DIR}
 	@@rm -rf ${DIST_DIR}
+
+foundry:
+	cat ${FOUNDRY_DIR}/build/foundry_intro.js \
+		${JSURI} \
+		${FOUNDRY_DIR}/build/foundry_outro.js \
+		> ${DEVELOPMENT_DIR}/uri.js
+	${FOUNDRY_UGLIFY} ${DEVELOPMENT_DIR}/uri.js > ${PRODUCTION_DIR}/uri.js
