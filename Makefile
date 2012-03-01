@@ -1,3 +1,5 @@
+include ../../build/modules.mk
+
 SRC_DIR = src
 SPEC_DIR = spec
 BUILD_DIR = build
@@ -29,10 +31,14 @@ DATE=$(shell git log -1 --pretty=format:%ad)
 PANDOC ?= `which pandoc 2>/dev/null`
 README_WIKI = ${DIST_DIR}/README.wiki
 
-FOUNDRY_DIR = ../..
-PRODUCTION_DIR = ${FOUNDRY_DIR}/scripts
-DEVELOPMENT_DIR = ${FOUNDRY_DIR}/scripts_
-FOUNDRY_UGLIFY = uglifyjs --unsafe -nc
+MODULE = uri
+FILENAME = ${MODULE}.js
+RAWFILE = ${DEVELOPMENT_DIR}/${MODULE}.raw.js
+
+SOURCE = ${JSURI}
+
+PRODUCTION = ${PRODUCTION_DIR}/${FILENAME}
+DEVELOPMENT = ${DEVELOPMENT_DIR}/${FILENAME}
 
 all: dist_dir jsuri foundry
 
@@ -88,10 +94,13 @@ readme_wiki:
 clean:
 	@@echo "Removing Distribution directory:" ${DIST_DIR}
 	@@rm -rf ${DIST_DIR}
+	rm -fr ${RAWFILE}
 
-foundry:
-	cat ${FOUNDRY_DIR}/build/foundry_intro.js \
-		${JSURI} \
-		${FOUNDRY_DIR}/build/foundry_outro.js \
-		> ${DEVELOPMENT_DIR}/uri.js
-	${FOUNDRY_UGLIFY} ${DEVELOPMENT_DIR}/uri.js > ${PRODUCTION_DIR}/uri.js
+foundry: raw module clean
+
+raw:
+	cat ${SOURCE} > ${RAWFILE}
+
+module:
+	${WRAP} ${RAWFILE} > ${DEVELOPMENT}
+	${UGLIFYJS} ${DEVELOPMENT} > ${PRODUCTION}
