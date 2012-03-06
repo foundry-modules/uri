@@ -102,5 +102,5 @@ raw:
 	cat ${SOURCE} > ${RAWFILE}
 
 module:
-	${WRAP} ${RAWFILE} > ${DEVELOPMENT}
+	${WRAP} -c ${RAWFILE} > ${DEVELOPMENT}
 	${UGLIFYJS} ${DEVELOPMENT} > ${PRODUCTION}
