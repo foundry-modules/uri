@@ -1,3 +1,5 @@
+all: dist_dir jsuri wrap-script minify-script clean
+
 include ../../build/modules.mk
 
 SRC_DIR = src
@@ -32,15 +34,7 @@ PANDOC ?= `which pandoc 2>/dev/null`
 README_WIKI = ${DIST_DIR}/README.wiki
 
 MODULE = uri
-FILENAME = ${MODULE}.js
-RAWFILE = ${DEVELOPMENT_DIR}/${MODULE}.raw.js
-
-SOURCE = ${JSURI}
-
-PRODUCTION = ${PRODUCTION_DIR}/${FILENAME}
-DEVELOPMENT = ${DEVELOPMENT_DIR}/${FILENAME}
-
-all: dist_dir jsuri foundry
+SOURCE_SCRIPT_FOLDER = ${DIST_DIR}
 
 core: dist_dir jsuri min lint v minv readme_wiki
 	@@echo "jsUri build complete."
@@ -94,13 +88,3 @@ readme_wiki:
 clean:
 	@@echo "Removing Distribution directory:" ${DIST_DIR}
 	@@rm -rf ${DIST_DIR}
-	rm -fr ${RAWFILE}
-
-foundry: raw module clean
-
-raw:
-	cat ${SOURCE} > ${RAWFILE}
-
-module:
-	${WRAP} -c ${RAWFILE} > ${DEVELOPMENT}
-	${UGLIFYJS} ${DEVELOPMENT} > ${PRODUCTION}
