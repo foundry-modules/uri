@@ -314,7 +314,7 @@ var Uri = function (uriString) {
         },
 
         extract = function(i) {
-            var urls = uriString.match(urlExtractor);
+            var urls = uriString.match(urlExtractor) || [];
             return (i===undefined) ? urls : (urls[i] || "");
         },
 
